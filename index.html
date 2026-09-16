@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homie 进销存管理系统 — 在线演示</title>
+<meta name="description" content="Homie 进销存管理系统在线演示：销售、维修、库存一体化管理。纯前端演示环境，数据仅存于浏览器。">
+<style>
+:root{--pri:#409eff;--ok:#67c23a;--warn:#e6a23c;--dan:#f56c6c;--info:#909399;--txt:#303133;--sub:#606266;--bg:#f5f7fa;--bd:#e4e7ed}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--txt);background:#fff;line-height:1.6}
+a{color:var(--pri);text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+/* ── 顶部导航 ── */
+header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--bd)}
+.nav{display:flex;align-items:center;height:60px;gap:28px}
+.logo{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.logo .dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#409eff,#7b5cff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.nav a{color:var(--sub);font-size:14px}
+.nav a:hover{color:var(--pri)}
+.nav .sp{flex:1}
+.demo-badge{font-size:12px;color:var(--warn);background:#fdf6ec;border:1px solid #faecd8;border-radius:12px;padding:3px 12px}
+/* ── Hero ── */
+.hero{background:linear-gradient(180deg,#ecf5ff 0%,#fff 100%);padding:72px 0 56px;text-align:center}
+.hero h1{font-size:36px;margin-bottom:16px;letter-spacing:1px}
+.hero p{color:var(--sub);font-size:16px;max-width:640px;margin:0 auto 28px}
+.btn{display:inline-block;border:none;cursor:pointer;border-radius:6px;font-size:15px;padding:12px 32px;transition:.2s}
+.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#66b1ff}
+.btn-plain{background:#fff;color:var(--pri);border:1px solid var(--pri)}.btn-plain:hover{background:#ecf5ff}
+.hero-stats{display:flex;justify-content:center;gap:56px;margin-top:44px;flex-wrap:wrap}
+.hstat b{font-size:26px;color:var(--pri);display:block}
+.hstat span{font-size:13px;color:var(--info)}
+/* ── 区块标题 ── */
+section{padding:64px 0}
+.sec-h{text-align:center;margin-bottom:40px}
+.sec-h h2{font-size:26px;margin-bottom:8px}
+.sec-h p{color:var(--info);font-size:14px}
+/* ── 功能卡片 ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:22px;transition:.2s}
+.card:hover{box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-3px)}
+.card .ic{font-size:26px;margin-bottom:10px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{font-size:13px;color:var(--sub)}
+.card .tags{margin-top:10px}
+/* ── tag ── */
+.tag{display:inline-block;font-size:12px;border-radius:4px;padding:1px 8px;border:1px solid;margin:2px 2px 2px 0}
+.t-pri{color:var(--pri);background:#ecf5ff;border-color:#d9ecff}
+.t-ok{color:var(--ok);background:#f0f9eb;border-color:#e1f3d8}
+.t-warn{color:var(--warn);background:#fdf6ec;border-color:#faecd8}
+.t-dan{color:var(--dan);background:#fef0f0;border-color:#fde2e2}
+.t-info{color:var(--info);background:#f4f4f5;border-color:#e9e9eb}
+/* ── 演示区 ── */
+#demo-sec{background:var(--bg)}
+.demo-shell{background:#fff;border:1px solid var(--bd);border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+.demo-top{display:flex;align-items:center;gap:10px;background:#f0f2f5;padding:10px 16px;border-bottom:1px solid var(--bd)}
+.demo-top .dots{display:flex;gap:6px}
+.demo-top .dots i{width:11px;height:11px;border-radius:50%}
+.demo-top .url{flex:1;text-align:center;font-size:12px;color:var(--info);background:#fff;border-radius:12px;padding:3px 16px}
+.demo-body{display:flex;min-height:560px}
+.side{width:190px;background:#304156;color:#bfcbd9;flex-shrink:0}
+.side .sti{padding:14px 18px;font-size:13px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.side a{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;color:#bfcbd9;font-size:14px;cursor:pointer;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.06);color:#fff}
+.side a.on{background:var(--pri);color:#fff;border-left-color:#2d7ad0}
+.side a .lock{font-size:11px;color:#8496a9}
+.main{flex:1;padding:20px;overflow:auto;max-width:960px}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.mh h3{font-size:17px}
+.mh .ops{display:flex;gap:8px}
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--bd);padding:9px 10px;text-align:left;white-space:nowrap}
+th{background:var(--bg);color:var(--sub);font-weight:500}
+td .lk{color:var(--pri);cursor:pointer;margin-right:10px;font-size:12px}
+td .lk.dan{color:var(--dan)}
+td .lk.warn{color:var(--warn)}
+td .lk.ok{color:var(--ok)}
+.empty{padding:40px;text-align:center;color:var(--info);font-size:13px}
+/* ── 仪表盘 ── */
+.dstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+.dstat{background:linear-gradient(135deg,#ecf5ff,#f5f7fa);border-radius:8px;padding:16px}
+.dstat b{font-size:24px;display:block}
+.dstat span{font-size:12px;color:var(--info)}
+.dcols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{border:1px solid var(--bd);border-radius:8px;padding:14px}
+.panel h4{font-size:14px;margin-bottom:10px}
+.loglist{list-style:none;font-size:12px;color:var(--sub);max-height:230px;overflow:auto}
+.loglist li{padding:6px 0;border-bottom:1px dashed var(--bd)}
+.loglist li b{color:var(--txt)}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:8px}
+.bar-row .bl{width:64px;text-align:right;color:var(--sub)}
+.bar-row .bt{flex:1;height:10px;background:#f0f2f5;border-radius:5px;overflow:hidden}
+.bar-row .bf{height:100%;background:var(--pri);border-radius:5px}
+/* ── 弹窗 ── */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.dlg{background:#fff;border-radius:10px;width:520px;max-width:94vw;max-height:88vh;overflow:auto;padding:22px}
+.dlg h3{font-size:16px;margin-bottom:16px}
+.dlg .ft{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.frow{margin-bottom:12px}
+.frow label{display:block;font-size:13px;color:var(--sub);margin-bottom:5px}
+.frow input,.frow select,.frow textarea{width:100%;border:1px solid var(--bd);border-radius:5px;padding:8px 10px;font-size:13px;font-family:inherit}
+.frow input:focus,.frow select:focus,.frow textarea:focus{outline:none;border-color:var(--pri)}
+.irow{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.irow input,.irow select{margin:0}
+.irow .amt{margin-left:auto;font-size:12px;color:var(--sub);white-space:nowrap}
+.radio-g{display:flex;gap:16px;font-size:13px}
+.radio-g label{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--txt)}
+/* ── toast ── */
+#toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast-i{background:#f0f9eb;border:1px solid #e1f3d8;color:var(--ok);border-radius:6px;padding:9px 20px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.1);animation:tin .25s}
+.toast-i.err{background:#fef0f0;border-color:#fde2e2;color:var(--dan)}
+.toast-i.info{background:#ecf5ff;border-color:#d9ecff;color:var(--pri)}
+@keyframes tin{from{opacity:0;transform:translateY(-8px)}to{opacity:1}}
+/* ── 安全说明 ── */
+.safe{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.safe .card{display:flex;gap:14px;align-items:flex-start}
+.safe .card .ic{font-size:30px}
+/* ── 联系我们 ── */
+#contact-sec{background:var(--bg)}
+.cgrid{display:grid;grid-template-columns:1fr 1.2fr;gap:22px}
+.ccard{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:26px}
+.ccard h3{margin-bottom:16px;font-size:16px}
+.cinfo{list-style:none}
+.cinfo li{display:flex;gap:10px;padding:11px 0;border-bottom:1px dashed var(--bd);font-size:14px}
+.cinfo li:last-child{border:none}
+.cinfo .cl{color:var(--info);width:70px;flex-shrink:0}
+/* ── footer ── */
+footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-top:1px solid var(--bd)}
+@media(max-width:860px){.demo-body{flex-direction:column}.side{width:100%;display:flex;overflow-x:auto}.side a{white-space:nowrap}.side .sti{display:none}.dcols,.cgrid{grid-template-columns:1fr}.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="dot">H</span>Homie 进销存管理系统</div>
+    <span class="demo-badge">演示环境 · 数据仅存浏览器</span>
+    <span class="sp"></span>
+    <a href="#feature-sec">功能亮点</a>
+    <a href="#demo-sec">操作演示</a>
+    <a href="#contact-sec">联系我们</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>销售 · 维修 · 库存 一体化管理</h1>
+    <p>面向设备销售与维修服务企业：订单流转、逐件序列号追踪、维修用料扣库存、收款开票凭证、多仓库盘点，全流程数字化。</p>
+    <a class="btn btn-pri" href="#demo-sec">进入操作演示</a>
+    <a class="btn btn-plain" href="#feature-sec">了解功能</a>
+    <div class="hero-stats">
+      <div class="hstat"><b>9</b><span>核心业务模块</span></div>
+      <div class="hstat"><b>38</b><span>业务数据表</span></div>
+      <div class="hstat"><b>60+</b><span>业务流程节点</span></div>
+      <div class="hstat"><b>多租户</b><span>公司数据隔离</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="feature-sec">
+  <div class="wrap">
+    <div class="sec-h"><h2>功能亮点</h2><p>覆盖企业从下单到收款的完整业务闭环</p></div>
+    <div class="grid" id="feature-cards"></div>
+  </div>
+</section>
+
+<section id="demo-sec">
+  <div class="wrap">
+    <div class="sec-h"><h2>在线操作演示</h2><p>以下为可交互的模拟界面 — 新增订单、审核出库、维修用料、收款开票均可实际点击操作</p></div>
+    <div class="demo-shell">
+      <div class="demo-top">
+        <div class="dots"><i style="background:#f56c6c"></i><i style="background:#e6a23c"></i><i style="background:#67c23a"></i></div>
+        <div class="url">homie-inventory.demo / 模拟环境</div>
+        <button class="btn btn-plain" style="padding:5px 14px;font-size:12px" onclick="resetDemo()">重置演示数据</button>
+      </div>
+      <div class="demo-body">
+        <div class="side">
+          <div class="sti">Homie IMS · 演示</div>
+          <a data-v="dash" class="on">📊 仪表盘</a>
+          <a data-v="sales">🧾 销售订单</a>
+          <a data-v="repair">🔧 维修管理</a>
+          <a data-v="prod">📦 商品库存</a>
+          <a data-lock="采购管理：采购订单 → 到货入库 → 付款登记">🚚 采购管理 <span class="lock">完整版</span></a>
+          <a data-lock="调拨管理：跨仓库调拨、出入库拍照">🔀 调拨管理 <span class="lock">完整版</span></a>
+          <a data-lock="盘点管理：盘盈盘亏自动调整库存">📋 盘点管理 <span class="lock">完整版</span></a>
+          <a data-lock="基础资料：商品/客户/供应商/仓库、Excel 导入">📁 基础资料 <span class="lock">完整版</span></a>
+        </div>
+        <div class="main" id="dmain"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><h2>数据与安全说明</h2><p>本演示页与正式系统完全隔离</p></div>
+    <div class="safe">
+      <div class="card"><div class="ic">🔒</div><div><h3>纯前端运行</h3><p>本页面为纯静态页面，不连接任何后台服务器，不含数据库，与正式系统网络完全隔离。</p></div></div>
+      <div class="card"><div class="ic">💾</div><div><h3>数据即用即弃</h3><p>您在演示中的全部操作仅保存在浏览器内存中，刷新页面即自动清空，不会上传也不会留存。</p></div></div>
+      <div class="card"><div class="ic">🛡️</div><div><h3>零接口调用</h3><p>页面不发起任何业务数据请求，联系我们通过邮件客户端直达，不经第三方中转。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact-sec">
+  <div class="wrap">
+    <div class="sec-h"><h2>联系我们</h2><p>留下您的需求，我们会尽快与您联系</p></div>
+    <div class="cgrid">
+      <div class="ccard">
+        <h3>联系方式</h3>
+        <ul class="cinfo">
+          <li><span class="cl">电　话</span><b id="c-phone">138-0000-0000</b></li>
+          <li><span class="cl">邮　箱</span><b id="c-mail">sales@example.com</b></li>
+          <li><span class="cl">微　信</span><b id="c-wechat">HomieIMS</b></li>
+          <li><span class="cl">地　址</span><b id="c-addr">上海市（演示信息，请替换）</b></li>
+        </ul>
+      </div>
+      <div class="ccard">
+        <h3>在线留言</h3>
+        <div class="frow"><label>您的称呼</label><input id="f-name" placeholder="姓名 / 贵公司名称"></div>
+        <div class="frow"><label>联系方式</label><input id="f-tel" placeholder="手机号 / 邮箱 / 微信号"></div>
+        <div class="frow"><label>需求描述</label><textarea id="f-msg" rows="4" placeholder="例如：我们是一家设备维修企业，想了解维修工单和库存联动功能…"></textarea></div>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn btn-pri" style="flex:1" onclick="contactMail()">通过邮件发送</button>
+          <button class="btn btn-plain" onclick="contactCopy()">复制留言内容</button>
+        </div>
+        <p style="font-size:12px;color:var(--info);margin-top:10px">点击「通过邮件发送」将打开您本机的邮件客户端并自动填充内容，信息不经过本页服务器。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Homie 进销存管理系统 · 在线演示页（纯静态、无数据库）· 演示数据均为虚构</footer>
+
+<div id="toast"></div>
+<div id="dlg-root"></div>
+
+<script>
+/* ═══════════════ 联系方式配置（部署前请替换为真实信息） ═══════════════ */
+const CONTACT = { phone:'138-0000-0000', mail:'sales@example.com', wechat:'HomieIMS', addr:'上海市（请替换）' };
+document.getElementById('c-phone').textContent = CONTACT.phone;
+document.getElementById('c-mail').textContent = CONTACT.mail;
+document.getElementById('c-wechat').textContent = CONTACT.wechat;
+document.getElementById('c-addr').textContent = CONTACT.addr;
+
+/* ═══════════════ 功能卡片数据 ═══════════════ */
+const FEATURES = [
+  ['🧾','销售订单管理','草稿→审核→出库→逐件签收→收款→开票全流程状态机，支持部分出库、预付款/尾款、按收款上传开票凭证。',['状态机流转','部分收款','出库单打印']],
+  ['🔧','维修工单管理','现场/物流送修、故障拍照、维修用料自动扣库存、工时打卡、保固期返修标记、第三方送修二维码协同。',['用料扣库存','保固返修','工程师移动端']],
+  ['📦','库存精细管理','多仓库、库存流水全程留痕、安全库存预警、调拨与盘点盈亏自动调整，软件授权到期提醒。',['库存流水','盘点调拨','到期预警']],
+  ['🔗','一物一码追踪','软件商品逐件序列号、非软件逐件品名；签收即激活保修期，出库-签收-保修-返修全链路可追溯。',['逐件序列号','保修期','序列号签收']],
+  ['💰','收款与开票','每笔收款绑定凭证文件，可同步上传发票号与开票凭证，事后可补传替换；维修费与销售款统一核销。',['收款凭证','按收款开票','应收核销']],
+  ['🏢','多公司租户隔离','一套部署服务多个公司，数据行级隔离、文件按公司分目录，各公司表单字段与打印格式独立配置。',['多租户','行级隔离','独立配置']],
+  ['🛡️','安全体系','JWT 认证、双因素认证（TOTP）、登录限流、密码过期策略、操作日志审计、实时站内通知。',['MFA','操作日志','WebSocket 通知']],
+  ['📱','移动端协同','工程师手机接单、扫码上传凭证/照片、现场 GPS 打卡、第三方厂商扫码进出厂登记。',['扫码上传','GPS 打卡','第三方协同']],
+];
+document.getElementById('feature-cards').innerHTML = FEATURES.map(f =>
+  `<div class="card"><div class="ic">${f[0]}</div><h3>${f[1]}</h3><p>${f[2]}</p><div class="tags">${f[3].map(t=>`<span class="tag t-pri">${t}</span>`).join('')}</div></div>`).join('');
+
+/* ═══════════════ 演示状态（纯内存） ═══════════════ */
+let state = {};
+const CUSTOMERS = ['晨光文具有限公司','蓝天科技有限公司','宏发电子经营部','万达物业服务中心'];
+function pad(n){return String(n).padStart(3,'0')}
+function seed(){
+  const P = (id,name,cat,price,stock,sw)=>({id,name,cat,price,stock,sw:!!sw});
+  state = {
+    seq:{so:5,ro:4,dl:1},
+    view:'dash',
+    products:[
+      P(1,'OfficeStack 办公套件（年授权）','软件授权',1999,50,true),
+      P(2,'NetGuard 企业防火墙','网络设备',4580,12,false),
+      P(3,'ScanPro 高速扫描仪','办公设备',2680,20,false),
+      P(4,'打印耗材碳粉盒','耗材',260,300,false),
+      P(5,'工控主板维修配件包','备件',480,40,false),
+      P(6,'服务器内存条 32G','配件',880,60,false),
+    ],
+    orders:[
+      {id:1,no:'SO-20260912-001',customer:'晨光文具有限公司',items:[{pid:1,name:'OfficeStack 办公套件（年授权）',qty:5,price:1999}],status:'待审核',createdAt:'09-12 10:20'},
+      {id:2,no:'SO-20260912-002',customer:'蓝天科技有限公司',items:[{pid:2,name:'NetGuard 企业防火墙',qty:2,price:4580},{pid:4,name:'打印耗材碳粉盒',qty:20,price:260}],status:'审核通过',createdAt:'09-13 09:05'},
+      {id:3,no:'SO-20260910-003',customer:'宏发电子经营部',items:[{pid:3,name:'ScanPro 高速扫描仪',qty:3,price:2680}],status:'待收款',tracking:'SF1392881123456',createdAt:'09-10 14:40'},
+      {id:4,no:'SO-20260905-004',customer:'万达物业服务中心',items:[{pid:6,name:'服务器内存条 32G',qty:4,price:880}],status:'已完成',tracking:'YT77381922',createdAt:'09-05 16:12'},
+    ],
+    repairs:[
+      {id:1,no:'RO-20260914-001',customer:'蓝天科技有限公司',product:'NetGuard 企业防火墙',fault:'端口不通，指示灯异常',status:'维修中',cost:0,materials:[],createdAt:'09-14 11:00'},
+      {id:2,no:'RO-20260911-002',customer:'晨光文具有限公司',product:'ScanPro 高速扫描仪',fault:'进纸卡纸，异响',status:'待签收',cost:350,materials:[{pid:5,name:'工控主板维修配件包',qty:1}],createdAt:'09-11 09:30'},
+      {id:3,no:'RO-20260908-003',customer:'万达物业服务中心',product:'服务器（客户送修）',fault:'无法开机',status:'已完成',cost:880,materials:[{pid:6,name:'服务器内存条 32G',qty:1}],createdAt:'09-08 15:20'},
+    ],
+    logs:[{t:'09-14 11:00',x:'创建维修单 RO-20260914-001（蓝天科技）'},{t:'09-13 09:05',x:'销售订单 SO-20260912-002 审核通过'},{t:'09-10 14:40',x:'销售订单 SO-20260910-003 完成出库并发货'}],
+  };
+}
+function amount(o){return o.items.reduce((s,i)=>s+i.qty*i.price,0)}
+function fmt(n){return '¥'+Number(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function log(x){state.logs.unshift({t:new Date().toLocaleDateString('zh-CN',{month:'2-digit',day:'2-digit'})+' '+new Date().toTimeString().slice(0,5),x});if(state.logs.length>30)state.logs.pop()}
+function now(){const d=new Date();return `${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+
+/* ═══════════════ toast / dialog ═══════════════ */
+function toast(msg,type){const t=document.createElement('div');t.className='toast-i'+(type==='err'?' err':type==='info'?' info':'');t.textContent=msg;
+  document.getElementById('toast').appendChild(t);setTimeout(()=>t.remove(),2600)}
+function closeDlg(){document.getElementById('dlg-root').innerHTML=''}
+function openDlg(title,bodyHTML,onOk,okText){
+  document.getElementById('dlg-root').innerHTML =
+    `<div class="mask" onclick="if(event.target===this)closeDlg()"><div class="dlg"><h3>${title}</h3>${bodyHTML}
+    <div class="ft"><button class="btn btn-plain" style="padding:8px 20px;font-size:13px" onclick="closeDlg()">取消</button>
+    <button class="btn btn-pri" style="padding:8px 20px;font-size:13px" id="dlg-ok">${okText||'确 定'}</button></div></div></div>`;
+  document.getElementById('dlg-ok').onclick=()=>{if(onOk()!==false)closeDlg()};
+}
+
+/* ═══════════════ 状态标签 ═══════════════ */
+const STAG={'草稿':'t-info','待审核':'t-warn','审核通过':'t-ok','已出库':'t-pri','待收款':'t-dan','已完成':'t-ok',
+  '待维修':'t-warn','维修中':'t-pri','待取回':'t-warn','待签收':'t-pri'};
+function stag(s){return `<span class="tag ${STAG[s]||'t-info'}">${s}</span>`}
+
+/* ═══════════════ 渲染 ═══════════════ */
+function render(){
+  document.querySelectorAll('.side a').forEach(a=>a.classList.toggle('on',a.dataset.v===state.view));
+  const m=document.getElementById('dmain');
+  if(state.view==='dash')m.innerHTML=vDash();
+  else if(state.view==='sales')m.innerHTML=vSales();
+  else if(state.view==='repair')m.innerHTML=vRepair();
+  else m.innerHTML=vProd();
+}
+function vDash(){
+  const total=state.orders.length, pend=state.orders.filter(o=>o.status==='待审核').length,
+    repairing=state.repairs.filter(r=>['待维修','维修中'].includes(r.status)).length,
+    stockVal=state.products.reduce((s,p)=>s+p.stock*p.price,0);
+  const dist={};state.orders.forEach(o=>dist[o.status]=(dist[o.status]||0)+1);
+  const max=Math.max(...Object.values(dist),1);
+  return `<div class="mh"><h3>仪表盘</h3><span style="font-size:12px;color:var(--info)">数据实时来自演示操作</span></div>
+  <div class="dstats">
+    <div class="dstat"><b>${total}</b><span>销售订单总数</span></div>
+    <div class="dstat"><b style="color:var(--warn)">${pend}</b><span>待审核订单</span></div>
+    <div class="dstat"><b style="color:var(--pri)">${repairing}</b><span>维修中工单</span></div>
+    <div class="dstat"><b>${fmt(stockVal)}</b><span>库存货值</span></div>
+  </div>
+  <div class="dcols">
+    <div class="panel"><h4>订单状态分布</h4>${Object.entries(dist).map(([k,v])=>
+      `<div class="bar-row"><span class="bl">${k}</span><div class="bt"><div class="bf" style="width:${v/max*100}%"></div></div><span>${v}</span></div>`).join('')||'<div class="empty">暂无订单</div>'}</div>
+    <div class="panel"><h4>最近动态</h4><ul class="loglist">${state.logs.map(l=>`<li><b>${l.t}</b>　${l.x}</li>`).join('')||'<li>暂无</li>'}</ul></div>
+  </div>`;
+}
+function vSales(){
+  return `<div class="mh"><h3>销售订单</h3><div class="ops"><button class="btn btn-pri" style="padding:8px 18px;font-size:13px" onclick="dlgNewOrder()">＋ 新增订单</button></div></div>
+  <table><thead><tr><th>单号</th><th>客户</th><th>商品</th><th style="text-align:right">金额</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead><tbody>
+  ${state.orders.map(o=>`<tr><td>${o.no}</td><td>${o.customer}</td><td style="white-space:normal">${o.items.map(i=>i.name+'×'+i.qty).join('、')}</td>
+    <td style="text-align:right">${fmt(amount(o))}</td><td>${stag(o.status)}</td><td>${o.createdAt}</td><td>${salesOps(o)}</td></tr>`).join('')}
+  </tbody></table>
+  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示：提交 → 审核 → 出库（自动扣库存）→ 签收 → 收款（完成）。完整版另支持部分出库/部分签收/预付尾款/开票凭证。</p>`;
+}
+function salesOps(o){
+  const L=(txt,fn,cls)=>`<span class="lk ${cls||''}" onclick="${fn}">${txt}</span>`;
+  switch(o.status){
+    case '草稿':return L('提交审核',`soSubmit(${o.id})`,'')+L('删除',`soDel(${o.id})`,'dan');
+    case '待审核':return L('审核通过',`soApprove(${o.id})`,'ok');
+    case '审核通过':return L('出库',`soDeliver(${o.id})`,'warn');
+    case '已出库':return L('客户签收',`soSign(${o.id})`,'ok');
+    case '待收款':return L('登记收款',`soPay(${o.id})`,'warn');
+    default:return '<span style="color:var(--info);font-size:12px">—</span>';
+  }
+}
+function vRepair(){
+  return `<div class="mh"><h3>维修管理</h3><div class="ops"><button class="btn btn-pri" style="padding:8px 18px;font-size:13px" onclick="dlgNewRepair()">＋ 新建维修单</button></div></div>
+  <table><thead><tr><th>维修单号</th><th>客户</th><th>维修商品</th><th>故障描述</th><th>用料</th><th style="text-align:right">费用</th><th>状态</th><th>操作</th></tr></thead><tbody>
+  ${state.repairs.map(r=>`<tr><td>${r.no}</td><td>${r.customer}</td><td>${r.product}</td><td style="white-space:normal">${r.fault}</td>
+    <td style="white-space:normal">${r.materials.map(m=>m.name+'×'+m.qty).join('、')||'—'}</td>
+    <td style="text-align:right">${r.cost?fmt(r.cost):'—'}</td><td>${stag(r.status)}</td><td>${repairOps(r)}</td></tr>`).join('')}
+  </tbody></table>
+  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示：开始维修 → 完成维修（登记用料并扣库存）→ 取回交付 → 签收 → 收款（完成）。</p>`;
+}
+function repairOps(r){
+  const L=(txt,fn,cls)=>`<span class="lk ${cls||''}" onclick="${fn}">${txt}</span>`;
+  switch(r.status){
+    case '待维修':return L('开始维修',`roStart(${r.id})`,'');
+    case '维修中':return L('完成维修',`roFinish(${r.id})`,'warn');
+    case '待取回':return L('取回交付',`roReturn(${r.id})`,'');
+    case '待签收':return L('客户签收',`roSign(${r.id})`,'ok');
+    case '待收款':return L('登记收款',`roPay(${r.id})`,'warn');
+    default:return '<span style="color:var(--info);font-size:12px">—</span>';
+  }
+}
+function vProd(){
+  return `<div class="mh"><h3>商品库存</h3><span style="font-size:12px;color:var(--info)">销售出库与维修用料会实时扣减此处库存</span></div>
+  <table><thead><tr><th>编码</th><th>商品名称</th><th>类别</th><th>类型</th><th style="text-align:right">单价</th><th style="text-align:right">库存</th><th>状态</th></tr></thead><tbody>
+  ${state.products.map(p=>`<tr><td>P${pad(p.id)}</td><td>${p.name}</td><td>${p.cat}</td>
+    <td>${p.sw?'<span class="tag t-pri">软件·逐件序列号</span>':'<span class="tag t-info">常规商品</span>'}</td>
+    <td style="text-align:right">${fmt(p.price)}</td><td style="text-align:right">${p.stock}</td>
+    <td>${p.stock<=10?'<span class="tag t-dan">低库存</span>':'<span class="tag t-ok">正常</span>'}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+/* ═══════════════ 销售流程动作 ═══════════════ */
+function dlgNewOrder(){
+  const rows=[{pid:'',qty:1}];
+  const body=`<div class="frow"><label>客户</label><select id="o-cust">${CUSTOMERS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+    <div class="frow"><label>商品明细</label><div id="o-items"></div>
+    <button class="btn btn-plain" style="padding:5px 12px;font-size:12px" onclick="addItemRow()">＋ 添加商品</button></div>
+    <div class="frow"><label>应收金额</label><b id="o-amt" style="font-size:17px;color:var(--pri)">¥0.00</b></div>`;
+  openDlg('新增销售订单',body,()=>{
+    const its=[...document.querySelectorAll('.o-irow')].map(r=>({pid:+r.dataset.pid,qty:+r.querySelector('.o-qty').value||0}));
+    if(!its.length){toast('请至少添加一个商品','err');return false}
+    for(const i of its){if(!i.pid||i.qty<1){toast('请选择商品并填写数量','err');return false}
+      const p=state.products.find(x=>x.id===i.pid);if(!p){toast('商品不存在','err');return false}}
+    const no=`SO-20260916-${pad(++state.seq.so)}`;
+    state.orders.unshift({id:Date.now(),no,customer:document.getElementById('o-cust').value,
+      items:its.map(i=>{const p=state.products.find(x=>x.id===i.pid);return {pid:p.id,name:p.name,qty:i.qty,price:p.price}}),
+      status:'草稿',createdAt:now()});
+    log(`创建销售订单 ${no}`);toast('订单已创建（草稿），可点击「提交审核」');render();
+  });
+  const draw=()=>{document.getElementById('o-items').innerHTML=rows.map((r,i)=>`<div class="irow o-irow" data-pid="${r.pid}">
+      <select class="o-pid" style="flex:1" onchange="rows[${i}].pid=+this.value;this.parentNode.dataset.pid=this.value;calcAmt()">
+        <option value="">选择商品</option>${state.products.map(p=>`<option value="${p.id}" ${r.pid===p.id?'selected':''}>${p.name}（库存 ${p.stock}）</option>`).join('')}</select>
+      <input class="o-qty" type="number" min="1" value="${r.qty}" style="width:80px" onchange="rows[${i}].qty=+this.value;calcAmt()">
+      <span class="amt"></span><span class="lk dan" onclick="rows.splice(${i},1);drawItems()">✕</span></div>`).join('');
+    calcAmt()};
+  window.rows=rows;window.addItemRow=()=>{rows.push({pid:'',qty:1});draw()};window.drawItems=draw;
+  window.calcAmt=()=>{let s=0;document.querySelectorAll('.o-irow').forEach(r=>{const p=state.products.find(x=>x.id===+r.dataset.pid);
+    const q=+r.querySelector('.o-qty').value||0;const sub=p?p.price*q:0;s+=sub;
+    r.querySelector('.amt').textContent=sub?fmt(sub):''});document.getElementById('o-amt').textContent=fmt(s)};
+  draw();
+}
+function soSubmit(id){const o=state.orders.find(x=>x.id===id);o.status='待审核';log(`提交审核 ${o.no}`);toast('已提交审核');render()}
+function soDel(id){state.orders=state.orders.filter(x=>x.id!==id);toast('订单已删除','info');render()}
+function soApprove(id){const o=state.orders.find(x=>x.id===id);o.status='审核通过';log(`审核通过 ${o.no}`);toast('审核通过，可进行出库');render()}
+function soDeliver(id){
+  const o=state.orders.find(x=>x.id===id);
+  openDlg('销售出库 — '+o.no,`<div class="frow"><label>配送方式</label><div class="radio-g">
+      <label><input type="radio" name="ship" value="物流发货" checked onchange="document.getElementById('tk-row').style.display='block'">物流发货</label>
+      <label><input type="radio" name="ship" value="自提" onchange="document.getElementById('tk-row').style.display='none'">自提</label></div></div>
+    <div class="frow" id="tk-row"><label>物流单号（自动生成）</label><input id="o-track" value="SF${Math.floor(Math.random()*9e9+1e9)}" readonly></div>
+    <div class="frow"><label>出库明细</label><div style="font-size:13px;color:var(--sub)">${o.items.map(i=>`${i.name} × ${i.qty}`).join('<br>')}</div></div>`,
+  ()=>{
+    for(const i of o.items){const p=state.products.find(x=>x.id===i.pid);
+      if(p.stock<i.qty){toast(`「${p.name}」库存不足（剩余 ${p.stock}）`,'err');return false}}
+    for(const i of o.items){state.products.find(x=>x.id===i.pid).stock-=i.qty}
+    const ship=document.querySelector('input[name=ship]:checked').value;
+    o.shipping=ship;o.tracking=ship==='物流发货'?document.getElementById('o-track').value:'';
+    o.status='已出库';log(`${o.no} 完成出库（${ship}）并扣减库存`);toast('出库成功，库存已扣减');render();
+  },'确认出库');
+}
+function soSign(id){const o=state.orders.find(x=>x.id===id);o.status='待收款';log(`${o.no} 客户签收`);toast('签收成功，进入待收款');render()}
+function soPay(id){
+  const o=state.orders.find(x=>x.id===id);
+  openDlg('登记收款 — '+o.no,`<div class="frow"><label>收款金额（应收 ${fmt(amount(o))}）</label><input id="p-amt" type="number" min="0.01" step="0.01" value="${amount(o)}"></div>
+    <div class="frow"><label>收款类型</label><select id="p-type"><option>尾款</option><option>预付款</option></select></div>
+    <div class="frow"><label>发票号（可选，按收款开票）</label><input id="p-inv" placeholder="如 INV-2026-0001"></div>`,
+  ()=>{const a=+document.getElementById('p-amt').value;if(!(a>0)){toast('请输入收款金额','err');return false}
+    o.status='已完成';const inv=document.getElementById('p-inv').value;
+    log(`${o.no} 收款 ${fmt(a)}${inv?'，发票号 '+inv:''}`);toast('收款成功，订单已完成');render();
+  },'确认收款');
+}
+
+/* ═══════════════ 维修流程动作 ═══════════════ */
+function dlgNewRepair(){
+  openDlg('新建维修单',`<div class="frow"><label>客户</label><select id="r-cust">${CUSTOMERS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+    <div class="frow"><label>维修商品</label><input id="r-prod" placeholder="商品名称"></div>
+    <div class="frow"><label>故障描述</label><textarea id="r-fault" rows="2" placeholder="描述故障现象"></textarea></div>`,
+  ()=>{const prod=document.getElementById('r-prod').value.trim();if(!prod){toast('请填写维修商品','err');return false}
+    const no=`RO-20260916-${pad(++state.seq.ro)}`;
+    state.repairs.unshift({id:Date.now(),no,customer:document.getElementById('r-cust').value,product:prod,
+      fault:document.getElementById('r-fault').value.trim()||'—',status:'待维修',cost:0,materials:[],createdAt:now()});
+    log(`创建维修单 ${no}`);toast('维修单已创建');render();
+  });
+}
+function roStart(id){const r=state.repairs.find(x=>x.id===id);r.status='维修中';log(`${r.no} 开始维修`);toast('已开始维修');render()}
+function roFinish(id){
+  const r=state.repairs.find(x=>x.id===id);const mats=[{pid:'',qty:1}];
+  openDlg('完成维修 — '+r.no,`<div class="frow"><label>维修用料（自动扣库存）</label><div id="m-items"></div>
+      <button class="btn btn-plain" style="padding:5px 12px;font-size:12px" onclick="addMatRow()">＋ 添加用料</button></div>
+    <div class="frow"><label>维修工时费</label><input id="r-cost" type="number" min="0" step="1" value="300"></div>`,
+  ()=>{
+    const its=[...document.querySelectorAll('.m-irow')].map(x=>({pid:+x.dataset.pid,qty:+x.querySelector('.m-qty').value||0}))
+      .filter(i=>i.pid&&i.qty>0);
+    for(const i of its){const p=state.products.find(x=>x.id===i.pid);
+      if(p.stock<i.qty){toast(`「${p.name}」库存不足（剩余 ${p.stock}）`,'err');return false}}
+    for(const i of its){state.products.find(x=>x.id===i.pid).stock-=i.qty;
+      const p=state.products.find(x=>x.id===i.pid);r.materials.push({pid:p.id,name:p.name,qty:i.qty})}
+    r.cost=+document.getElementById('r-cost').value||0;
+    r.status='待取回';log(`${r.no} 完成维修${its.length?'，用料已扣库存':''}`);toast('维修完成，等待取回交付');render();
+  },'确认完成');
+  const draw=()=>{document.getElementById('m-items').innerHTML=mats.map((m,i)=>`<div class="irow m-irow" data-pid="${m.pid}">
+      <select style="flex:1" onchange="mats[${i}].pid=+this.value;this.parentNode.dataset.pid=this.value">
+        <option value="">选择用料（可不含）</option>${state.products.map(p=>`<option value="${p.id}" ${m.pid===p.id?'selected':''}>${p.name}（库存 ${p.stock}）</option>`).join('')}</select>
+      <input class="m-qty" type="number" min="1" value="${m.qty}" style="width:80px" onchange="mats[${i}].qty=+this.value">
+      <span class="lk dan" onclick="mats.splice(${i},1);drawMats()">✕</span></div>`).join('')};
+  window.mats=mats;window.addMatRow=()=>{mats.push({pid:'',qty:1});draw()};window.drawMats=draw;draw();
+}
+function roReturn(id){const r=state.repairs.find(x=>x.id===id);r.status='待签收';log(`${r.no} 取回交付`);toast('已取回，等待客户签收');render()}
+function roSign(id){const r=state.repairs.find(x=>x.id===id);r.status='待收款';log(`${r.no} 客户签收`);toast('签收成功，进入待收款');render()}
+function roPay(id){const r=state.repairs.find(x=>x.id===id);r.status='已完成';log(`${r.no} 收款 ${fmt(r.cost)}，维修单完成`);toast('收款成功，维修单已完成');render()}
+
+/* ═══════════════ 联系我们 ═══════════════ */
+function contactMail(){
+  const n=document.getElementById('f-name').value.trim(),t=document.getElementById('f-tel').value.trim(),m=document.getElementById('f-msg').value.trim();
+  const body=`称呼：${n||'-'}\n联系方式：${t||'-'}\n需求描述：\n${m||'-'}\n\n（来自 Homie IMS 在线演示页留言）`;
+  location.href=`mailto:${CONTACT.mail}?subject=${encodeURIComponent('【Homie IMS 咨询】'+(n||'意向客户'))}&body=${encodeURIComponent(body)}`;
+  toast('正在打开邮件客户端…','info');
+}
+function contactCopy(){
+  const n=document.getElementById('f-name').value.trim(),t=document.getElementById('f-tel').value.trim(),m=document.getElementById('f-msg').value.trim();
+  const text=`称呼：${n||'-'}\n联系方式：${t||'-'}\n需求描述：${m||'-'}`;
+  (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(
+    ()=>toast('留言内容已复制，可粘贴到邮件或微信'),
+    ()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('留言内容已复制')});
+}
+
+/* ═══════════════ 初始化 ═══════════════ */
+function resetDemo(){seed();state.view='dash';toast('演示数据已重置','info');render()}
+document.querySelectorAll('.side a').forEach(a=>{
+  if(a.dataset.lock){a.onclick=()=>toast(a.dataset.lock+'，请联系我们获取完整版演示','info')}
+  else a.onclick=()=>{state.view=a.dataset.v;render()};
+});
+seed();render();
+</script>
+</body>
+</html>
