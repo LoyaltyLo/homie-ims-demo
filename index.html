@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Homie 进销存管理系统 — 在线演示</title>
-<meta name="description" content="Homie 进销存管理系统在线演示：销售、维修、库存一体化管理。纯前端演示环境，数据仅存于浏览器。">
+<meta name="description" content="Homie 进销存管理系统在线演示：销售、维修、库存、成本一体化管理，四种成本计价方式、毛利报表、维修电子签收。纯前端演示环境，数据仅存于浏览器。">
 <style>
 :root{--pri:#409eff;--ok:#67c23a;--warn:#e6a23c;--dan:#f56c6c;--info:#909399;--txt:#303133;--sub:#606266;--bg:#f5f7fa;--bd:#e4e7ed}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -136,6 +136,7 @@ footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-
   <div class="wrap nav">
     <div class="logo"><span class="dot">H</span>Homie 进销存管理系统</div>
     <span class="demo-badge">演示环境 · 数据仅存浏览器</span>
+    <span class="demo-badge" style="color:var(--ok);background:#f0f9eb;border-color:#e1f3d8">已更新至 v1.5.1</span>
     <span class="sp"></span>
     <a href="#feature-sec">功能亮点</a>
     <a href="#demo-sec">操作演示</a>
@@ -145,13 +146,15 @@ footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-
 
 <div class="hero">
   <div class="wrap">
-    <h1>销售 · 维修 · 库存 一体化管理</h1>
-    <p>面向设备销售与维修服务企业：订单流转、逐件序列号追踪、维修用料扣库存、收款开票凭证、多仓库盘点，全流程数字化。</p>
+    <h1>销售 · 维修 · 库存 · 成本 一体化管理</h1>
+    <p>面向设备销售与维修服务企业：订单流转、逐件序列号追踪、维修用料扣库存、库存成本核算与毛利仪表盘、收款开票凭证、多仓库盘点，全流程数字化。</p>
     <a class="btn btn-pri" href="#demo-sec">进入操作演示</a>
     <a class="btn btn-plain" href="#feature-sec">了解功能</a>
     <div class="hero-stats">
       <div class="hstat"><b>9</b><span>核心业务模块</span></div>
-      <div class="hstat"><b>38</b><span>业务数据表</span></div>
+      <div class="hstat"><b>40</b><span>业务数据表</span></div>
+      <div class="hstat"><b>4</b><span>成本计价方式</span></div>
+      <div class="hstat"><b>8</b><span>单据打印版式</span></div>
       <div class="hstat"><b>60+</b><span>业务流程节点</span></div>
       <div class="hstat"><b>私有化</b><span>部署可选</span></div>
     </div>
@@ -185,6 +188,8 @@ footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-
           <a data-lock="调拨管理：跨仓库调拨、出入库拍照">🔀 调拨管理 <span class="lock">完整版</span></a>
           <a data-lock="盘点管理：盘盈盘亏自动调整库存">📋 盘点管理 <span class="lock">完整版</span></a>
           <a data-lock="基础资料：商品/客户/供应商/仓库、Excel 导入">📁 基础资料 <span class="lock">完整版</span></a>
+          <a data-lock="报表中心：销售毛利报表、库存流水成本，支持导出 Excel">📈 报表中心 <span class="lock">完整版</span></a>
+          <a data-lock="系统设置：成本计价方式四选一、打印版式设计器">⚙️ 系统设置 <span class="lock">完整版</span></a>
         </div>
         <div class="main" id="dmain"></div>
       </div>
@@ -199,6 +204,7 @@ footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-
       <div class="card"><div class="ic">🔒</div><div><h3>纯前端运行</h3><p>本页面为纯静态页面，不连接任何后台服务器，不含数据库，与正式系统网络完全隔离。</p></div></div>
       <div class="card"><div class="ic">💾</div><div><h3>数据即用即弃</h3><p>您在演示中的全部操作仅保存在浏览器内存中，刷新页面即自动清空，不会上传也不会留存。</p></div></div>
       <div class="card"><div class="ic">🛡️</div><div><h3>零接口调用</h3><p>页面不发起任何业务数据请求，联系我们通过邮件客户端直达，不经第三方中转。</p></div></div>
+      <div class="card"><div class="ic">🏢</div><div><h3>私有化部署</h3><p>正式版支持私有化部署：单机运行、数据自持，可部署在公司内网，不依赖外部云服务；本演示页的轻量形态与之同一套代码体系。</p></div></div>
     </div>
   </div>
 </section>
@@ -206,6 +212,14 @@ footer{padding:26px 0;text-align:center;color:var(--info);font-size:12px;border-
 <section id="contact-sec">
   <div class="wrap">
     <div class="sec-h"><h2>联系我们</h2><p>留下您的需求，我们会尽快与您联系</p></div>
+    <div style="background:#fff;border:1px solid var(--bd);border-left:4px solid var(--ok);border-radius:10px;padding:18px 24px;margin-bottom:22px">
+      <h3 style="font-size:15px;margin-bottom:10px">🆕 本次更新（v1.5.1 · 2026-10）</h3>
+      <ul style="list-style:none;font-size:13px;color:var(--sub)">
+        <li style="padding:3px 0">✅ 库存成本核算 — 四种计价方式四选一，毛利报表按天导出 Excel，维修用料按实际成本计价</li>
+        <li style="padding:3px 0">✅ 维修电子签收 — 现场维修完成后客户平板/手机手写签名，单据自动带出</li>
+        <li style="padding:3px 0">✅ 单据打印设计器 — A4 画布拖拽自定义版式，打印与 PDF/Excel 同步渲染</li>
+      </ul>
+    </div>
     <div class="cgrid">
       <div class="ccard">
         <h3>联系方式</h3>
@@ -242,12 +256,14 @@ document.getElementById('c-wechat').textContent = CONTACT.wechat;
 
 /* ═══════════════ 功能卡片数据 ═══════════════ */
 const FEATURES = [
-  ['🧾','销售订单管理','草稿→审核→出库→逐件签收→收款→开票全流程状态机，支持部分出库、预付款/尾款、按收款上传开票凭证。',['状态机流转','部分收款','出库单打印']],
-  ['🔧','维修工单管理','现场/物流送修、故障拍照、维修用料自动扣库存、工时打卡、保固期返修标记、第三方送修二维码协同。',['用料扣库存','保固返修','工程师移动端']],
-  ['📦','库存精细管理','多仓库、库存流水全程留痕、安全库存预警、调拨与盘点盈亏自动调整，软件授权到期提醒。',['库存流水','盘点调拨','到期预警']],
+  ['🧾','销售订单管理','草稿→审核→出库→逐件/整单签收→收款→开票全流程状态机，支持部分出库、多档销售价开单、预付款/尾款、按收款上传开票凭证。',['状态机流转','多档销售价','逐件/整单签收','部分收款']],
+  ['🔧','维修工单管理','现场/物流送修、故障拍照、维修用料自动扣库存并按实际成本计价、工时打卡、现场完成后客户手写电子签收、保固期返修标记。',['用料按实际成本','电子签收','保固返修','工程师移动端']],
+  ['📊','库存成本核算','四种计价方式公司级四选一：移动加权平均、先进先出、月末一次加权、个别计价；出入库流水自动记成本，仪表盘展示今日毛利/本月毛利/库存总值，销售毛利报表可导出 Excel。',['四种计价方式','毛利报表','库存总值']],
+  ['📦','库存精细管理','多仓库、库存流水全程留痕（含成本单价与金额）、安全库存预警、调拨与盘点盈亏自动调整，软件授权到期提醒。',['库存流水','盘点调拨','到期预警']],
   ['🔗','一物一码追踪','软件商品逐件序列号、非软件逐件品名；签收即激活保修期，出库-签收-保修-返修全链路可追溯。',['逐件序列号','保修期','序列号签收']],
   ['💰','收款与开票','每笔收款绑定凭证文件，可同步上传发票号与开票凭证，事后可补传替换；维修费与销售款统一核销。',['收款凭证','按收款开票','应收核销']],
-  ['🚚','采购与供应商','采购订单审批、供应商台账，到货入库自动增加库存，与销售出库共用同一本库存账。',['采购入库','供应商','库存联动']],
+  ['🖨️','单据打印设计器','维修 5 种、销售 3 种正式版式模版；A4 画布式自定义设计器，字段开关、拖拽布局；打印与 Excel 导出渲染同一版式，出库单支持 PDF 下载，含序列号明细与金额大写。',['A4 拖拽设计','8 种版式','PDF 导出']],
+  ['🚚','采购与供应商','采购订单审批、供应商台账，到货入库自动增加库存（收货录实收单价，序列号成本自动登记），与销售出库共用同一本库存账。',['采购入库','实收单价','库存联动']],
   ['🛡️','安全体系','JWT 认证、双因素认证（TOTP）、登录限流、密码过期策略、操作日志审计、实时站内通知。',['MFA','操作日志','WebSocket 通知']],
   ['📱','移动端协同','工程师手机接单、扫码上传凭证/照片、现场 GPS 打卡、第三方厂商扫码进出厂登记。',['扫码上传','GPS 打卡','第三方协同']],
 ];
@@ -259,7 +275,8 @@ let state = {};
 const CUSTOMERS = ['晨光文具有限公司','蓝天科技有限公司','宏发电子经营部','万达物业服务中心'];
 function pad(n){return String(n).padStart(3,'0')}
 function seed(){
-  const P = (id,name,cat,price,stock,sw)=>({id,name,cat,price,stock,sw:!!sw});
+  const P = (id,name,cat,price,stock,sw)=>({id,name,cat,price,stock,sw:!!sw,
+    tiers:{'零售价':price,'批发价':Math.round(price*0.9),'VIP价':Math.round(price*0.8)}});
   state = {
     seq:{so:5,ro:4,dl:1},
     view:'dash',
@@ -327,7 +344,9 @@ function vDash(){
     <div class="dstat"><b>${total}</b><span>销售订单总数</span></div>
     <div class="dstat"><b style="color:var(--warn)">${pend}</b><span>待审核订单</span></div>
     <div class="dstat"><b style="color:var(--pri)">${repairing}</b><span>维修中工单</span></div>
-    <div class="dstat"><b>${fmt(stockVal)}</b><span>库存货值</span></div>
+    <div class="dstat"><b style="color:var(--ok)">${fmt(12480)}</b><span>今日毛利（演示值）</span></div>
+    <div class="dstat"><b style="color:var(--ok)">${fmt(86350)}</b><span>本月毛利（演示值）</span></div>
+    <div class="dstat"><b>${fmt(stockVal)}</b><span>库存总值</span></div>
   </div>
   <div class="dcols">
     <div class="panel"><h4>订单状态分布</h4>${Object.entries(dist).map(([k,v])=>
@@ -341,7 +360,7 @@ function vSales(){
   ${state.orders.map(o=>`<tr><td>${o.no}</td><td>${o.customer}</td><td style="white-space:normal">${o.items.map(i=>i.name+'×'+i.qty).join('、')}</td>
     <td style="text-align:right">${fmt(amount(o))}</td><td>${stag(o.status)}</td><td>${o.createdAt}</td><td>${salesOps(o)}</td></tr>`).join('')}
   </tbody></table>
-  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示：提交 → 审核 → 出库（自动扣库存）→ 签收 → 收款（完成）。完整版另支持部分出库/部分签收/预付尾款/开票凭证。</p>`;
+  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示：提交 → 审核 → 出库（自动扣库存，按公司计价方式记成本）→ 签收 → 收款（完成）。下单时可选零售/批发/VIP 价格档位；完整版另支持部分出库/部分签收/预付尾款/开票凭证。</p>`;
 }
 function salesOps(o){
   const L=(txt,fn,cls)=>`<span class="lk ${cls||''}" onclick="${fn}">${txt}</span>`;
@@ -361,7 +380,7 @@ function vRepair(){
     <td style="white-space:normal">${r.materials.map(m=>m.name+'×'+m.qty).join('、')||'—'}</td>
     <td style="text-align:right">${r.cost?fmt(r.cost):'—'}</td><td>${stag(r.status)}</td><td>${repairOps(r)}</td></tr>`).join('')}
   </tbody></table>
-  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示：开始维修 → 完成维修（登记用料并扣库存）→ 取回交付 → 签收 → 收款（完成）。</p>`;
+  <p style="font-size:12px;color:var(--info);margin-top:10px">流程演示 — 现场维修：完成维修即电子签收 → 收款（有应收）；物流送修：完成维修 → 取回交付 → 电子签收 → 收款。维修用料自动扣库存并按实际出库成本计价。</p>`;
 }
 function repairOps(r){
   const L=(txt,fn,cls)=>`<span class="lk ${cls||''}" onclick="${fn}">${txt}</span>`;
@@ -386,31 +405,35 @@ function vProd(){
 
 /* ═══════════════ 销售流程动作 ═══════════════ */
 function dlgNewOrder(){
-  const rows=[{pid:'',qty:1}];
+  const rows=[{pid:'',qty:1,tier:'零售价'}];
   const body=`<div class="frow"><label>客户</label><select id="o-cust">${CUSTOMERS.map(c=>`<option>${c}</option>`).join('')}</select></div>
     <div class="frow"><label>商品明细</label><div id="o-items"></div>
     <button class="btn btn-plain" style="padding:5px 12px;font-size:12px" onclick="addItemRow()">＋ 添加商品</button></div>
     <div class="frow"><label>应收金额</label><b id="o-amt" style="font-size:17px;color:var(--pri)">¥0.00</b></div>`;
   openDlg('新增销售订单',body,()=>{
-    const its=[...document.querySelectorAll('.o-irow')].map(r=>({pid:+r.dataset.pid,qty:+r.querySelector('.o-qty').value||0}));
+    const its=[...document.querySelectorAll('.o-irow')].map(r=>({pid:+r.dataset.pid,qty:+r.querySelector('.o-qty').value||0,
+      tier:r.querySelector('.o-tier').value}));
     if(!its.length){toast('请至少添加一个商品','err');return false}
     for(const i of its){if(!i.pid||i.qty<1){toast('请选择商品并填写数量','err');return false}
       const p=state.products.find(x=>x.id===i.pid);if(!p){toast('商品不存在','err');return false}}
     const no=`SO-20260916-${pad(++state.seq.so)}`;
     state.orders.unshift({id:Date.now(),no,customer:document.getElementById('o-cust').value,
-      items:its.map(i=>{const p=state.products.find(x=>x.id===i.pid);return {pid:p.id,name:p.name,qty:i.qty,price:p.price}}),
+      items:its.map(i=>{const p=state.products.find(x=>x.id===i.pid);return {pid:p.id,name:p.name,qty:i.qty,price:p.tiers[i.tier]||p.price,tier:i.tier}}),
       status:'草稿',createdAt:now()});
     log(`创建销售订单 ${no}`);toast('订单已创建（草稿），可点击「提交审核」');render();
   });
   const draw=()=>{document.getElementById('o-items').innerHTML=rows.map((r,i)=>`<div class="irow o-irow" data-pid="${r.pid}">
-      <select class="o-pid" style="flex:1" onchange="rows[${i}].pid=+this.value;this.parentNode.dataset.pid=this.value;calcAmt()">
+      <select class="o-pid" style="flex:1.4" onchange="rows[${i}].pid=+this.value;this.parentNode.dataset.pid=this.value;calcAmt()">
         <option value="">选择商品</option>${state.products.map(p=>`<option value="${p.id}" ${r.pid===p.id?'selected':''}>${p.name}（库存 ${p.stock}）</option>`).join('')}</select>
-      <input class="o-qty" type="number" min="1" value="${r.qty}" style="width:80px" onchange="rows[${i}].qty=+this.value;calcAmt()">
+      <select class="o-tier" style="flex:.6" onchange="rows[${i}].tier=this.value;calcAmt()">
+        ${Object.keys(state.products[0].tiers).map(t=>`<option ${r.tier===t?'selected':''}>${t}</option>`).join('')}</select>
+      <input class="o-qty" type="number" min="1" value="${r.qty}" style="width:64px" onchange="rows[${i}].qty=+this.value;calcAmt()">
       <span class="amt"></span><span class="lk dan" onclick="rows.splice(${i},1);drawItems()">✕</span></div>`).join('');
     calcAmt()};
-  window.rows=rows;window.addItemRow=()=>{rows.push({pid:'',qty:1});draw()};window.drawItems=draw;
+  window.rows=rows;window.addItemRow=()=>{rows.push({pid:'',qty:1,tier:'零售价'});draw()};window.drawItems=draw;
   window.calcAmt=()=>{let s=0;document.querySelectorAll('.o-irow').forEach(r=>{const p=state.products.find(x=>x.id===+r.dataset.pid);
-    const q=+r.querySelector('.o-qty').value||0;const sub=p?p.price*q:0;s+=sub;
+    const q=+r.querySelector('.o-qty').value||0;const t=r.querySelector('.o-tier').value;
+    const sub=p?(p.tiers[t]||p.price)*q:0;s+=sub;
     r.querySelector('.amt').textContent=sub?fmt(sub):''});document.getElementById('o-amt').textContent=fmt(s)};
   draw();
 }
@@ -448,13 +471,17 @@ function soPay(id){
 /* ═══════════════ 维修流程动作 ═══════════════ */
 function dlgNewRepair(){
   openDlg('新建维修单',`<div class="frow"><label>客户</label><select id="r-cust">${CUSTOMERS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+    <div class="frow"><label>维修方式</label><div class="radio-g">
+      <label><input type="radio" name="rmode" value="现场维修" checked>现场维修</label>
+      <label><input type="radio" name="rmode" value="物流送修">物流送修</label></div></div>
     <div class="frow"><label>维修商品</label><input id="r-prod" placeholder="商品名称"></div>
     <div class="frow"><label>故障描述</label><textarea id="r-fault" rows="2" placeholder="描述故障现象"></textarea></div>`,
   ()=>{const prod=document.getElementById('r-prod').value.trim();if(!prod){toast('请填写维修商品','err');return false}
+    const mode=document.querySelector('input[name=rmode]:checked').value;
     const no=`RO-20260916-${pad(++state.seq.ro)}`;
-    state.repairs.unshift({id:Date.now(),no,customer:document.getElementById('r-cust').value,product:prod,
+    state.repairs.unshift({id:Date.now(),no,customer:document.getElementById('r-cust').value,product:prod,mode,
       fault:document.getElementById('r-fault').value.trim()||'—',status:'待维修',cost:0,materials:[],createdAt:now()});
-    log(`创建维修单 ${no}`);toast('维修单已创建');render();
+    log(`创建维修单 ${no}（${mode}）`);toast('维修单已创建');render();
   });
 }
 function roStart(id){const r=state.repairs.find(x=>x.id===id);r.status='维修中';log(`${r.no} 开始维修`);toast('已开始维修');render()}
@@ -471,7 +498,9 @@ function roFinish(id){
     for(const i of its){state.products.find(x=>x.id===i.pid).stock-=i.qty;
       const p=state.products.find(x=>x.id===i.pid);r.materials.push({pid:p.id,name:p.name,qty:i.qty})}
     r.cost=+document.getElementById('r-cost').value||0;
-    r.status='待取回';log(`${r.no} 完成维修${its.length?'，用料已扣库存':''}`);toast('维修完成，等待取回交付');render();
+    if(r.mode==='现场维修'){r.status='待签收';log(`${r.no} 完成维修（现场）${its.length?'，用料已扣库存':''}`);toast('维修完成（现场），等待客户电子签收')}
+    else{r.status='待取回';log(`${r.no} 完成维修${its.length?'，用料已扣库存':''}`);toast('维修完成，等待取回交付')}
+    render();
   },'确认完成');
   const draw=()=>{document.getElementById('m-items').innerHTML=mats.map((m,i)=>`<div class="irow m-irow" data-pid="${m.pid}">
       <select style="flex:1" onchange="mats[${i}].pid=+this.value;this.parentNode.dataset.pid=this.value">
@@ -481,7 +510,31 @@ function roFinish(id){
   window.mats=mats;window.addMatRow=()=>{mats.push({pid:'',qty:1});draw()};window.drawMats=draw;draw();
 }
 function roReturn(id){const r=state.repairs.find(x=>x.id===id);r.status='待签收';log(`${r.no} 取回交付`);toast('已取回，等待客户签收');render()}
-function roSign(id){const r=state.repairs.find(x=>x.id===id);r.status='待收款';log(`${r.no} 客户签收`);toast('签收成功，进入待收款');render()}
+function roSign(id){
+  const r=state.repairs.find(x=>x.id===id);
+  openDlg('客户电子签收 — '+r.no,`
+    <div class="frow"><label>客户手写签名</label>
+      <canvas id="sig-cv" width="456" height="150" style="width:100%;border:1.5px dashed var(--bd);border-radius:6px;background:#fafbfc;cursor:crosshair;touch-action:none"></canvas>
+      <div style="margin-top:6px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--info)">请客户在此区域按住书写（完整版支持平板 / 手机手写）</span>
+        <span class="lk" onclick="sigClear()">清除重写</span></div></div>
+    <div class="frow"><label>签收确认</label><div style="font-size:13px;color:var(--sub)">签署后视为客户确认维修结果；本单费用 ${fmt(r.cost)}${r.cost?'，签收后进入待收款':'，无应收将直接完成'}。</div></div>`,
+  ()=>{if(!window.__signed){toast('请客户签名后再确认','err');return false}
+    if(r.cost>0){r.status='待收款';log(`${r.no} 客户电子签收，进入待收款`);toast('签收成功，进入待收款')}
+    else{r.status='已完成';log(`${r.no} 客户电子签收（无应收），维修单完成`);toast('签收成功，维修单已完成')}
+    render();
+  },'确认签收');
+  const cv=document.getElementById('sig-cv');
+  const ctx=cv&&cv.getContext?cv.getContext('2d'):null;
+  if(ctx){ctx.lineWidth=2.5;ctx.lineCap='round';ctx.strokeStyle='#1f2d3d';
+    let dr=false;window.__signed=false;
+    const pos=e=>{const b=cv.getBoundingClientRect();return[(e.clientX-b.left)*cv.width/b.width,(e.clientY-b.top)*cv.height/b.height]};
+    cv.onpointerdown=e=>{dr=true;window.__signed=true;const[x,y]=pos(e);ctx.beginPath();ctx.moveTo(x,y)};
+    cv.onpointermove=e=>{if(!dr)return;const[x,y]=pos(e);ctx.lineTo(x,y);ctx.stroke()};
+    window.addEventListener('pointerup',()=>dr=false);
+    window.sigClear=()=>{ctx.clearRect(0,0,cv.width,cv.height);window.__signed=false};
+  }else{window.__signed=true;window.sigClear=()=>{}}
+}
 function roPay(id){const r=state.repairs.find(x=>x.id===id);r.status='已完成';log(`${r.no} 收款 ${fmt(r.cost)}，维修单完成`);toast('收款成功，维修单已完成');render()}
 
 /* ═══════════════ 联系我们 ═══════════════ */
